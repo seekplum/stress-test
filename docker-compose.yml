@@ -1,0 +1,72 @@
+version: "3.4"
+
+x-defaults: &defaults
+  # 使用时需要 docker-compose 后加上 --compatibility 参数
+  deploy:
+    resources:
+      limits:
+        cpus: '1'
+        memory: 1G
+      reservations:
+        # cpus: '0.5'
+        memory: 512M
+  environment: 
+    - NGINX_HOST=nginx
+    - NGINX_PORT=80
+  external_links:
+    - nginx:nginx
+  restart: on-failure
+services:
+  nginx:
+    image: nginx:1.17-alpine
+    volumes:
+      - ${PWD}/conf/nginx/hello.conf:/etc/nginx/conf.d/hello.conf:ro
+    restart: on-failure
+  fastapi:
+    <<: *defaults
+    image: seekplum/fastapi-stress:0.0.1
+    build:
+      context: fastapi-stress
+      dockerfile: Dockerfile
+    ports:
+      - 8098:8098
+  flask:
+    <<: *defaults
+    image: seekplum/flask-stress:0.0.1
+    build:
+      context: flask-stress
+      dockerfile: Dockerfile
+    ports:
+      - 8099:8099
+  tornado:
+    <<: *defaults
+    image: seekplum/tornado-stress:0.0.1
+    build:
+      context: tornado-stress
+      dockerfile: Dockerfile
+    ports:
+      - 8096:8096
+  sanic:
+    <<: *defaults
+    image: seekplum/sanic-stress:0.0.1
+    build:
+      context: sanic-stress
+      dockerfile: Dockerfile
+    ports:
+      - 8094:8094
+  gin:
+    <<: *defaults
+    image: seekplum/gin-stress:0.0.1
+    build:
+      context: gin-stress
+      dockerfile: Dockerfile
+    ports:
+      - 8095:8095
+  node:
+    <<: *defaults
+    image: seekplum/node-stress:0.0.1
+    build:
+      context: node-stress
+      dockerfile: Dockerfile
+    ports:
+      - 8097:8097
