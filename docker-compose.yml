@@ -1,0 +1,164 @@
+version: "2.4"
+
+x-limits: &resources
+  # 3.4版本 使用时需要在 docker-compose 后加上 --compatibility 参数
+  # deploy:
+  #   resources:
+  #     limits:
+  #       cpus: '1'
+  #       memory: 1G
+  #     reservations:
+  #       cpus: '0.50'
+  #       memory: 512M
+  mem_reservation: "512M"
+  mem_limit: "1G"
+  cpus: 0.5
+  cpu_count: 1
+  environment:
+    - NGINX_HOST=nginx
+    - NGINX_PORT=80
+  external_links:
+    - nginx:nginx
+  restart: on-failure
+services:
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: nginx
+    volumes:
+      - ${PWD}/conf/nginx/hello.conf:/etc/nginx/conf.d/hello.conf:ro
+    restart: on-failure
+  statsd:
+    image: prom/statsd-exporter:v0.15.0
+    container_name: statsd
+    command:
+      - --statsd.mapping-config=/statsd/statsd.conf
+    ports:
+      - 9102:9102
+      - 9125:9125/udp
+    volumes:
+      - ${PWD}/conf/statsd/statsd.conf:/statsd/statsd.conf
+    restart: on-failure
+  cadvisor:
+    image: google/cadvisor:v0.32.0
+    container_name: cadvisor
+    ports:
+      - 8080:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    privileged: true
+    restart: on-failure
+  prometheus:
+    image: prom/prometheus:v2.18.1
+    container_name: prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.enable-lifecycle
+      - --storage.tsdb.path=/etc/prometheus/data
+      - --storage.tsdb.retention.time=7d
+      - --log.level=debug
+    ports:
+      - 9090:9090
+    depends_on:
+      - statsd
+      - cadvisor
+    external_links:
+      - statsd:statsd
+      - cadvisor:cadvisor
+    volumes:
+      - ${PWD}/conf/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ${PWD}/data/prometheus-data:/etc/prometheus/data
+    restart: on-failure
+  grafana:
+    image: grafana/grafana:7.0.0
+    container_name: grafana
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    external_links:
+      - prometheus:prometheus
+    volumes:
+      - ${PWD}/conf/grafana/defaults.ini:/etc/grafana/grafana.ini
+      - ${PWD}/data/grafana-data:/etc/grafana/provisioning
+    environment:
+      - GF_SERVER_ROOT_URL=http://grafana.server.name
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    restart: on-failure
+  fastapi:
+    <<: *resources
+    image: seekplum/fastapi-stress:0.0.1
+    container_name: fastapi
+    build:
+      context: fastapi-stress
+      dockerfile: Dockerfile
+    ports:
+      - 8098:8098
+  flask:
+    <<: *resources
+    image: seekplum/flask-stress:0.0.1
+    container_name: flask
+    build:
+      context: flask-stress
+      dockerfile: Dockerfile
+    ports:
+      - 8099:8099
+    depends_on:
+      - statsd
+    external_links:
+      - statsd:statsd
+  tornado:
+    <<: *resources
+    image: seekplum/tornado-stress:0.0.1
+    container_name: tornado
+    build:
+      context: tornado-stress
+      dockerfile: Dockerfile
+    ports:
+      - 8096:8096
+  sanic:
+    <<: *resources
+    image: seekplum/sanic-stress:0.0.1
+    container_name: sanic
+    build:
+      context: sanic-stress
+      dockerfile: Dockerfile
+    ports:
+      - 8094:8094
+  gin:
+    <<: *resources
+    image: seekplum/gin-stress:0.0.1
+    container_name: gin
+    build:
+      context: gin-stress
+      dockerfile: Dockerfile
+    ports:
+      - 8095:8095
+  node:
+    <<: *resources
+    image: seekplum/node-stress:0.0.1
+    container_name: node
+    build:
+      context: node-stress
+      dockerfile: Dockerfile
+    ports:
+      - 8097:8097
+  openresty:
+    <<: *resources
+    image: openresty/openresty:1.15.8.3-alpine
+    container_name: openresty
+    ports:
+      - 8093:8081
+    volumes:
+      - ${PWD}/conf/openresty/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - ${PWD}/conf/openresty/lua.conf:/etc/nginx/conf.d/default.conf:ro
+      - ${PWD}/logs:/usr/local/openresty/nginx/logs
+      - ${PWD}/openresty-stress/lua:/usr/local/openresty/nginx/lua:ro
+      - ${PWD}/openresty-stress/lua-libs/http.lua:/usr/local/openresty/lualib/resty/http.lua:ro
+      - ${PWD}/openresty-stress/lua-libs/http_headers.lua:/usr/local/openresty/lualib/resty/http_headers.lua:ro
+    environment:
+      - TEST_DOMAIN=http://nginx
+      - SERVER_PORT=8081

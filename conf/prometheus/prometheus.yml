@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 1s # 拉取 targets 的默认时间间隔
+  evaluation_interval: 1s
+
+scrape_configs:
+  - job_name: "hello_gunicorn"
+    static_configs:
+      - targets: ["statsd:9102"]
+  - job_name: "cadvisor"
+    static_configs:
+      - targets: ["cadvisor:8080"]

@@ -1,0 +1,6 @@
+Flask
+gevent
+gunicorn
+requests
+httplib2
+httpx
