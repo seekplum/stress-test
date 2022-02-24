@@ -26,7 +26,7 @@ hpack==3.0.0
     # via h2
 hstspreload==2020.4.14
     # via httpx
-httplib2==0.17.2
+httplib2==0.19.0
     # via -r requirements.in
 httptools==0.1.1
     # via uvicorn
@@ -40,6 +40,8 @@ idna==2.9
     #   requests
 pydantic==1.6.2
     # via fastapi
+pyparsing==2.4.7
+    # via httplib2
 requests==2.23.0
     # via -r requirements.in
 rfc3986==1.4.0
