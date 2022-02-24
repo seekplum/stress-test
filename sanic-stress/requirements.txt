@@ -4,7 +4,7 @@
 #
 #    pip-compile --index-url=https://mirrors.aliyun.com/pypi/simple --output-file=requirements.txt requirements.in
 #
-aiofiles==0.5.0
+aiofiles==0.8.0
     # via sanic
 aiohttp==3.7.4
     # via -r requirements.in
@@ -15,46 +15,38 @@ attrs==19.3.0
 certifi==2020.4.5.1
     # via httpx
 chardet==3.0.4
-    # via
-    #   aiohttp
-    #   httpx
+    # via aiohttp
 gunicorn==20.0.4
     # via -r requirements.in
 h11==0.9.0
-    # via httpx
-h2==3.2.0
-    # via httpx
-hpack==3.0.0
-    # via h2
-hstspreload==2020.5.19
+    # via httpcore
+httpcore==0.11.1
     # via httpx
 httptools==0.1.1
     # via sanic
-httpx==0.11.1
+httpx==0.15.4
     # via sanic
-hyperframe==5.2.0
-    # via h2
 idna==2.9
     # via
-    #   httpx
+    #   rfc3986
     #   yarl
-multidict==4.7.6
+multidict==5.2.0
     # via
     #   aiohttp
     #   sanic
     #   yarl
-rfc3986==1.4.0
+rfc3986[idna2008]==1.4.0
     # via httpx
-sanic==20.3.0
+sanic==20.12.6
     # via -r requirements.in
 sniffio==1.1.0
-    # via httpx
+    # via
+    #   httpcore
+    #   httpx
 typing-extensions==4.1.1
     # via aiohttp
 ujson==2.0.3
     # via sanic
-urllib3==1.26.5
-    # via httpx
 uvloop==0.14.0
     # via sanic
 websockets==8.1
