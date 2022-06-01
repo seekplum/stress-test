@@ -4,43 +4,40 @@
 #
 #    pip-compile --index-url=https://mirrors.aliyun.com/pypi/simple --output-file=requirements.txt requirements.in
 #
+anyio==3.6.1
+    # via httpcore
 certifi==2020.4.5.1
     # via
+    #   httpcore
     #   httpx
     #   requests
 chardet==3.0.4
-    # via
-    #   httpx
-    #   requests
-h11==0.9.0
-    # via httpx
-h2==3.2.0
-    # via httpx
-hpack==3.0.0
-    # via h2
-hstspreload==2020.4.14
+    # via requests
+h11==0.12.0
+    # via httpcore
+httpcore==0.15.0
     # via httpx
 httplib2==0.19.0
     # via -r requirements.in
-httpx==0.12.1
+httpx==0.23.0
     # via -r requirements.in
-hyperframe==5.2.0
-    # via h2
 idna==2.9
     # via
-    #   httpx
+    #   anyio
     #   requests
+    #   rfc3986
 pyparsing==2.4.7
     # via httplib2
 requests==2.23.0
     # via -r requirements.in
-rfc3986==1.4.0
+rfc3986[idna2008]==1.4.0
     # via httpx
 sniffio==1.1.0
-    # via httpx
+    # via
+    #   anyio
+    #   httpcore
+    #   httpx
 tornado==6.0.4
     # via -r requirements.in
 urllib3==1.25.8
-    # via
-    #   httpx
-    #   requests
+    # via requests
