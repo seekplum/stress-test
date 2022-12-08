@@ -4,7 +4,7 @@
 #
 #    pip-compile --index-url=https://mirrors.aliyun.com/pypi/simple --output-file=requirements.txt requirements.in
 #
-certifi==2020.4.5.1
+certifi==2022.12.7
     # via
     #   httpx
     #   requests
@@ -15,7 +15,7 @@ chardet==3.0.4
 click==7.1.1
     # via uvicorn
 fastapi==0.65.2
-    # via -r requirements.in
+    # via -r fastapi-stress/requirements.in
 h11==0.9.0
     # via
     #   httpx
@@ -27,11 +27,11 @@ hpack==3.0.0
 hstspreload==2020.4.14
     # via httpx
 httplib2==0.19.0
-    # via -r requirements.in
+    # via -r fastapi-stress/requirements.in
 httptools==0.1.1
     # via uvicorn
 httpx==0.12.1
-    # via -r requirements.in
+    # via -r fastapi-stress/requirements.in
 hyperframe==5.2.0
     # via h2
 idna==2.9
@@ -43,7 +43,7 @@ pydantic==1.6.2
 pyparsing==2.4.7
     # via httplib2
 requests==2.23.0
-    # via -r requirements.in
+    # via -r fastapi-stress/requirements.in
 rfc3986==1.4.0
     # via httpx
 sniffio==1.1.0
@@ -55,7 +55,7 @@ urllib3==1.25.8
     #   httpx
     #   requests
 uvicorn==0.11.7
-    # via -r requirements.in
+    # via -r fastapi-stress/requirements.in
 uvloop==0.14.0
     # via uvicorn
 websockets==8.1
