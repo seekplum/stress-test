@@ -4,7 +4,7 @@
 #
 #    pip-compile --index-url=https://mirrors.aliyun.com/pypi/simple --output-file=requirements.txt requirements.in
 #
-certifi==2020.4.5.1
+certifi==2022.12.7
     # via
     #   httpx
     #   requests
