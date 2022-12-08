@@ -4,7 +4,7 @@
 #
 #    pip-compile --index-url=https://mirrors.aliyun.com/pypi/simple --output-file=requirements.txt requirements.in
 #
-certifi==2020.4.5.1
+certifi==2022.12.7
     # via
     #   httpx
     #   requests
@@ -21,9 +21,9 @@ hpack==3.0.0
 hstspreload==2020.4.14
     # via httpx
 httplib2==0.19.0
-    # via -r requirements.in
+    # via -r tornado-stress/requirements.in
 httpx==0.12.1
-    # via -r requirements.in
+    # via -r tornado-stress/requirements.in
 hyperframe==5.2.0
     # via h2
 idna==2.9
@@ -33,13 +33,13 @@ idna==2.9
 pyparsing==2.4.7
     # via httplib2
 requests==2.23.0
-    # via -r requirements.in
+    # via -r tornado-stress/requirements.in
 rfc3986==1.4.0
     # via httpx
 sniffio==1.1.0
     # via httpx
 tornado==6.0.4
-    # via -r requirements.in
+    # via -r tornado-stress/requirements.in
 urllib3==1.25.8
     # via
     #   httpx
